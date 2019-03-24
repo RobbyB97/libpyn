@@ -10,7 +10,6 @@ class Podcast:
 
     def __init__(self, link, name='Unnamed podcast'):
 
-
         # Inner function to get data from each podcast on a channel
         def getItem(item):
             try:
