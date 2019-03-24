@@ -13,12 +13,14 @@ class Podcast:
 
         # Inner function to get data from each podcast on a channel
         def getItem(item):
-
-            podcast = {}    # Dictionary for storing podcast info
-            podcast['title'] = item.find('title').text
-            podcast['date'] = item.find('pubdate').text
-            podcast['mp3'] = item.find('enclosure')['url']
-            podcast['image'] = item.find('itunes:image')['href']
+            try:
+                podcast = {}    # Dictionary for storing podcast info
+                podcast['title'] = item.find('title').text
+                podcast['date'] = item.find('pubdate').text
+                podcast['mp3'] = item.find('enclosure')['url']
+                podcast['image'] = item.find('itunes:image')['href']
+            except Exception:
+                log.exception('Could not parse item.')
             return podcast
 
         self.mp3list = []   # List of podcasts from channel
@@ -29,10 +31,11 @@ class Podcast:
             if not '/rss' in link:
                 link = link + '/rss'
             xml = requests.get(link).text
+            xmlsoup = bs(xml, "lxml")
         except Exception:
             logging.exception('Link is not valid.')
 
-        xmlsoup = bs(xml, "lxml")
+        # Loop through podcasts in feed and get data
         for item in xmlsoup.findAll('item'):
             self.mp3list.append(getItem(item))
         return
