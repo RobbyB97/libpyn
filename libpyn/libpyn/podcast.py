@@ -61,4 +61,13 @@ class Podcast:
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
+        # If folder previously created, clear its contents
+        if foldername:
+            try:
+                os.chdir('./%s/' % foldername)
+                for file in os.listdir():
+                    os.remove(file)
+            os.mkdir('./%s/' % foldername)
+            os.chdir('./%s/' % foldername)
+
         return
