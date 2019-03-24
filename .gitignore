@@ -6,3 +6,8 @@ venv/*
 
 # Ignore cache
 *.pyc
+
+# Ignore PyPI meta
+libpyn/dist/*
+libpyn/libpyn.egg-info/*
+libpyn/build/*
