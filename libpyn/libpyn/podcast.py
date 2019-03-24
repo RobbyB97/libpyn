@@ -1,3 +1,4 @@
+import os
 import logging
 import requests
 from bs4 import BeautifulSoup as bs
@@ -24,6 +25,7 @@ class Podcast:
 
         self.mp3list = []   # List of podcasts from channel
         self.name = name
+        self.dir = os.path.dirname(os.path.realpath(__file__))
 
         # Get RSS feed
         try:
@@ -31,10 +33,32 @@ class Podcast:
                 link = link + '/rss'
             xml = requests.get(link).text
             xmlsoup = bs(xml, "lxml")
-        except Exception:
+        except:
             logging.exception('Link is not valid.')
 
         # Loop through podcasts in feed and get data
         for item in xmlsoup.findAll('item'):
             self.mp3list.append(getItem(item))
+        return
+
+
+    def download(podcast, dir=None, foldername=None):
+    # Download mp3 file(s)
+
+        if dir:
+            try:
+                os.chdir(dir)
+            except:
+                logging.exception('Could not find directory at: %s ...' % dir)
+
+        # Find Downloads folder, make one if it doesn't exist
+        else:
+            home = os.path.expanduser('~')
+            try:
+                os.chdir(home + '/Downloads')
+            except:
+                logging.warning('Could not find Downloads folder. Creating...')
+                os.mkdir('%s/Downloads/' % home)
+                os.chdir('%s/Downloads/' % home)
+
         return
