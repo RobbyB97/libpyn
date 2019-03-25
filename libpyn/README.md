@@ -32,7 +32,6 @@ Features <a name="features"></a>
 
 * ### The Podcast class <a name="podcast-class"></a>
 
-⋅⋅⋅ test
 
 * ### Downloading podcasts <a name="downloading-podcasts"></a>
 
