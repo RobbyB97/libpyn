@@ -68,13 +68,13 @@ class Podcast:
 
 
     # Download mp3 file(s)
-    def download(self, dir=None, foldername=None):
+    def download(self, path=None, foldername=None):
 
         if dir:
             try:
-                os.chdir(dir)
+                os.chdir(path)
             except:
-                logging.exception('Could not find directory at: %s ...' % dir)
+                logging.exception('Could not find directory at: %s ...' % path)
 
         # Find Downloads folder, make one if it doesn't exist
         else:
