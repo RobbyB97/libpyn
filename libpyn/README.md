@@ -86,7 +86,7 @@ example.download(path=path, foldername=directory)
 In order to get a list of HTML iframes of the latest episodes to embed on a webpage, use the **iframes()** function.
 
 ``` python
-iframes-list = example.iframes()
+iframesList = example.iframes()
 ```
 
 ___
