@@ -5,12 +5,12 @@ ___
 
 Table of Contents
 -----------------
-    * [Features](#features)
-        * [Podcast class](#podcast-class)
-        * [Downloading podcasts](#downloading-podcasts)
-        * [RSS feed](#rss-feed)
-        * [iframes](#iframes)
-    * [Changelog](#changelog)
+* [Features](#features)
+    * [Podcast class](#podcast-class)
+    * [Downloading podcasts](#downloading-podcasts)
+    * [RSS feed](#rss-feed)
+    * [iframes](#iframes)
+* [Changelog](#changelog)
 
 ___
 Features <a name="features"></a>
