@@ -5,6 +5,8 @@ ___
 
 Table of Contents
 -----------------
+
+* [Installation](#installation)
 * [Features](#features)
     * [Podcast class](#podcast-class)
     * [Downloading podcasts](#downloading-podcasts)
@@ -13,4 +15,31 @@ Table of Contents
 * [Changelog](#changelog)
 
 ___
+
+Installation <a name="installation"></a>
+------------
+
+In order to install _libpyn_, run this command on the terminal
+
+``` python
+foo@bar:~$ pip install libpyn
+```
+
+
+___
+
 Features <a name="features"></a>
+--------
+
+* ### The Podcast class <a name="podcast-class"></a>
+
+* ### Downloading podcasts <a name="downloading-podcasts"></a>
+
+* ### RSS feeds <a name="rss-feed"></a>
+
+* ### iframes <a name="iframes"></a>
+
+___
+
+Changelog <a name="changelog"></a>
+---------
