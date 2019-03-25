@@ -1,9 +1,11 @@
 import os
 import logging
 import requests
+from time import sleep
 from bs4 import BeautifulSoup as bs
 
 logging.basicConfig(filename='podcast.log',level=logging.DEBUG)
+
 
 
 class Podcast:
@@ -42,8 +44,8 @@ class Podcast:
         return
 
 
-    def download(podcast, dir=None, foldername=None):
     # Download mp3 file(s)
+    def download(self, dir=None, foldername=None):
 
         if dir:
             try:
@@ -61,13 +63,40 @@ class Podcast:
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
-        # If folder previously created, clear its contents
         if foldername:
+
             try:
                 os.chdir('./%s/' % foldername)
-                for file in os.listdir():
-                    os.remove(file)
-            os.mkdir('./%s/' % foldername)
-            os.chdir('./%s/' % foldername)
+                filelist = []   # List of downloaded mp3 files
+                for podcast in os.listdir():
+                    file = podcast.replace(' ', '_')[:-4]
+                    filelist.append(file)
 
+            # Create filename directory if it doesn't exist
+            except:
+                logging.warning('/%s/ doesn\'t exist. Creating...')
+                os.mkdir('./%s/' % foldername)
+                os.chdir('./%s/' % foldername)
+
+        # Download files
+        for podcast in self.mp3list:
+            exists = False      # Flag for if file already exists
+            filelist = []       # List of files in download directory
+
+            # Ensure podcasts aren't redownloaded if directory not empty
+            if filelist:
+                for file in filelist:
+                    if podcast['title'].replace(' ', '_') == file:
+                        exists = True
+                if exists == True:
+                    break
+
+            # Download file
+            if exists  == False:
+                sleep(1)    # Ensure no IP ban
+                filename = podcast['title'].replace(' ', '_') + '.mp3'
+                file = requests.get(podcast['mp3'])
+                logging.debug('Downloading %s...' % podcast['title'])
+                with open(filename, 'wb') as f:
+                    f.write(file.content)
         return
