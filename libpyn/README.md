@@ -10,7 +10,6 @@ Table of Contents
 * [Features](#features)
     * [Podcast class](#podcast-class)
     * [Downloading podcasts](#downloading-podcasts)
-    * [RSS feed](#rss-feed)
     * [iframes](#iframes)
 * [Changelog](#changelog)
 
@@ -32,14 +31,68 @@ Features <a name="features"></a>
 
 * ### The Podcast class <a name="podcast-class"></a>
 
+The _Podcast class_ is the main feature of this package.
+
+``` python
+# Import statement
+from libpyn.podcast import Podcast
+```
+
+In order to create an instance of the Podcast class, pass a link to a _libsyn_ channel in with the instance declaration.
+
+``` python
+channel = 'https://therabbithole.libsyn.com/'
+example = Podcast(channel)
+```
+
+Once initialized, the Podcast class contains useful information about the podcast.
+
+``` python
+example.name = # Name of the podcast channel
+self.mp3list = # List of episodes, each episode saved as a dictionary
+self.htmllink = # Link to the podcast's website  
+```
+
+Each dictionary in _self.mp3list_ contains these key/value pairs:
+
+``` python
+podcast = {}    # Dictionary for storing podcast info
+podcast['title'] = # Name of episode
+podcast['date'] = # Publish date
+podcast['mp3'] = # Link to mp3 file
+podcast['image'] = # Channel logo
+```
 
 * ### Downloading podcasts <a name="downloading-podcasts"></a>
 
-* ### RSS feeds <a name="rss-feed"></a>
+In order to download the mp3 files of a podcast channel, use the **download()** function.
+
+``` python
+# This will download the mp3 files in a directory named after the podcast channel
+# in the Downloads directory
+example.download()
+```
+
+A specific _path_ can be specified, the name of the directory (_foldername_) in which the mp3 files will be stored can also be specified. If the foldername is not specified, it will be the name of the channel. (Spaces are replaced with underscores.)
+
+``` python
+path = 'path/to/store/mp3'
+directory = '/files'
+example.download(path=path, foldername=directory)
+```
 
 * ### iframes <a name="iframes"></a>
+
+In order to get a list of HTML iframes of the latest episodes to embed on a webpage, use the **iframes()** function.
+
+``` python
+iframes-list = example.iframes()
+```
 
 ___
 
 Changelog <a name="changelog"></a>
 ---------
+
+### == v1.0.0 ==
+* _Initial release_
