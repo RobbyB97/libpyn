@@ -11,37 +11,46 @@ logging.basicConfig(filename='podcast.log',level=logging.DEBUG)
 class Podcast:
 
 
-    def __init__(self, link, name='Unnamed podcast'):
-
-        # Inner function to get data from each podcast on a channel
-        def getItem(item):
-            try:
-                podcast = {}    # Dictionary for storing podcast info
-                podcast['title'] = item.find('title').text
-                podcast['date'] = item.find('pubdate').text
-                podcast['mp3'] = item.find('enclosure')['url']
-                podcast['image'] = item.find('itunes:image')['href']
-            except Exception:
-                log.exception('Could not parse item.')
-            return podcast
+    def __init__(self, link):
 
         self.mp3list = []   # List of podcasts from channel
-        self.name = name
         self.dir = os.path.dirname(os.path.realpath(__file__))
 
-        # Get RSS feed
+        # Get Links
+        if not '/rss' in link:
+            self.rsslink = link + '/rss'
+            self.htmllink = link
+        if '/rss' in link:
+            self.rsslink = link
+            self.htmllink = link[:-4]
+
+        # Parse links
         try:
-            if not '/rss' in link:
-                link = link + '/rss'
-            xml = requests.get(link).text
-            xmlsoup = bs(xml, "lxml")
+            xml = requests.get(self.rsslink).text
+            self.xmlsoup = bs(xml, "lxml")
+            html = requests.get(self.htmllink).text
+            self.htmlsoup = bs(html, "lxml")
         except:
             logging.exception('Link is not valid.')
 
-        # Loop through podcasts in feed and get data
-        for item in xmlsoup.findAll('item'):
-            self.mp3list.append(getItem(item))
+        # Get RSS data
+        self.name = self.xmlsoup.find('title')
+        for item in self.xmlsoup.findAll('item'):
+            self.mp3list.append(self.getRSSItem(item))
         return
+
+
+    # Get data from each podcast on an RSS channel
+    def getRSSItem(self, item):
+        try:
+            podcast = {}    # Dictionary for storing podcast info
+            podcast['title'] = item.find('title').text
+            podcast['date'] = item.find('pubdate').text
+            podcast['mp3'] = item.find('enclosure')['url']
+            podcast['image'] = item.find('itunes:image')['href']
+        except Exception:
+            log.exception('Could not parse item.')
+        return podcast
 
 
     # Download mp3 file(s)
@@ -63,31 +72,33 @@ class Podcast:
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
-        if foldername:
+        # Set folder name to title of podcast if none was given
+        if not foldername:
+            foldername = self.name.replace(' ', '_')
 
-            try:
-                os.chdir('./%s/' % foldername)
-                filelist = []   # List of downloaded mp3 files
-                for podcast in os.listdir():
-                    file = podcast.replace(' ', '_')[:-4]
-                    filelist.append(file)
+        # Get into podcast directory, keep note of previously saved files
+        try:
+            os.chdir('./%s/' % foldername)
+            filelist = []   # List of downloaded mp3 files
+            for podcast in os.listdir():
+                file = podcast.replace(' ', '_')[:-4]
+                filelist.append(file)
 
-            # Create filename directory if it doesn't exist
-            except:
-                logging.warning('/%s/ doesn\'t exist. Creating...')
-                os.mkdir('./%s/' % foldername)
-                os.chdir('./%s/' % foldername)
+        # Create foldername directory if it doesn't exist
+        except:
+            logging.warning('/%s/ doesn\'t exist. Creating...')
+            os.mkdir('./%s/' % foldername)
+            os.chdir('./%s/' % foldername)
 
         # Download files
         for podcast in self.mp3list:
             exists = False      # Flag for if file already exists
-            filelist = []       # List of files in download directory
 
             # Ensure podcasts aren't redownloaded if directory not empty
-            if filelist:
-                for file in filelist:
-                    if podcast['title'].replace(' ', '_') == file:
-                        exists = True
+            for file in filelist:
+                if podcast['title'].replace(' ', '_') == file:
+                    exists = True
+                    logging.warning('%s already exists. Skipping...' % file)
                 if exists == True:
                     break
 
