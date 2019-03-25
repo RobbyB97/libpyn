@@ -15,6 +15,7 @@ class Podcast:
 
         self.mp3list = []   # List of podcasts from channel
         self.dir = os.path.dirname(os.path.realpath(__file__))
+        self.headers = {'user-agent': 'libpyn/1.0.0'}
 
         # Get Links
         if not '/rss' in link:
@@ -26,9 +27,9 @@ class Podcast:
 
         # Parse links
         try:
-            xml = requests.get(self.rsslink).text
+            xml = requests.get(self.rsslink, headers=self.headers).text
             self.xmlsoup = bs(xml, "lxml")
-            html = requests.get(self.htmllink).text
+            html = requests.get(self.htmllink, headers=self.headers).text
             self.htmlsoup = bs(html, "lxml")
         except:
             logging.exception('Link is not valid.')
@@ -42,15 +43,25 @@ class Podcast:
 
     # Get data from each podcast on an RSS channel
     def getRSSItem(self, item):
+
         try:
             podcast = {}    # Dictionary for storing podcast info
             podcast['title'] = item.find('title').text
             podcast['date'] = item.find('pubdate').text
             podcast['mp3'] = item.find('enclosure')['url']
             podcast['image'] = item.find('itunes:image')['href']
+
         except Exception:
             log.exception('Could not parse item.')
         return podcast
+
+    # Get HTML iframes of latest episodes
+    def iframes(self):
+
+        iframes = []
+
+        return iframes
+
 
 
     # Download mp3 file(s)
@@ -106,7 +117,7 @@ class Podcast:
             if exists  == False:
                 sleep(1)    # Ensure no IP ban
                 filename = podcast['title'].replace(' ', '_') + '.mp3'
-                file = requests.get(podcast['mp3'])
+                file = requests.get(podcast['mp3'], headers=self.headers)
                 logging.debug('Downloading %s...' % podcast['title'])
                 with open(filename, 'wb') as f:
                     f.write(file.content)
