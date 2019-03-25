@@ -21,7 +21,7 @@ Installation <a name="installation"></a>
 
 In order to install _libpyn_, run this command on the terminal
 
-``` python
+``` console
 foo@bar:~$ pip install libpyn
 ```
 
