@@ -60,6 +60,10 @@ class Podcast:
 
         iframes = []
 
+        for item in self.htmlsoup.findAll('iframe'):
+            item = str(item).split('src="')
+            item = str(item[0] + 'src="https:' + item[1])
+            iframes.append(item)
         return iframes
 
 
