@@ -94,5 +94,8 @@ ___
 Changelog <a name="changelog"></a>
 ---------
 
+### == v1.0.1 ==
+* _Fix logger, log always in same directory as podcast.py_
+
 ### == v1.0.0 ==
 * _Initial release_
