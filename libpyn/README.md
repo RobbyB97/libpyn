@@ -83,6 +83,7 @@ Changelog
 ---------
 
 ### == v1.0.1 ==
+* _Fix bugs involving download function_
 * _Remove HTML tags from podcast.name attribute_
 * _Fix logger, log always in same directory as podcast.py_
 
