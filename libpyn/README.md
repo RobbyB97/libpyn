@@ -3,19 +3,7 @@ Libpyn
 > A third-party API for **libsyn**.
 ___
 
-Table of Contents
------------------
-
-* [Installation](#installation)
-* [Features](#features)
-    * [Podcast class](#podcast-class)
-    * [Downloading podcasts](#downloading-podcasts)
-    * [iframes](#iframes)
-* [Changelog](#changelog)
-
-___
-
-Installation <a name="installation"></a>
+Installation
 ------------
 
 In order to install _libpyn_, run this command on the terminal
@@ -26,7 +14,7 @@ foo@bar:~$ pip install libpyn
 
 ___
 
-Features <a name="features"></a>
+Features
 --------
 
 * ### The Podcast class <a name="podcast-class"></a>
@@ -63,7 +51,7 @@ podcast['mp3'] = # Link to mp3 file
 podcast['image'] = # Channel logo
 ```
 
-* ### Downloading podcasts <a name="downloading-podcasts"></a>
+* ### Downloading podcasts
 
 In order to download the mp3 files of a podcast channel, use the **download()** function.
 
@@ -81,7 +69,7 @@ directory = '/files'
 example.download(path=path, foldername=directory)
 ```
 
-* ### iframes <a name="iframes"></a>
+* ### iframes
 
 In order to get a list of HTML iframes of the latest episodes to embed on a webpage, use the **iframes()** function.
 
@@ -91,7 +79,7 @@ iframesList = example.iframes()
 
 ___
 
-Changelog <a name="changelog"></a>
+Changelog
 ---------
 
 ### == v1.0.1 ==
