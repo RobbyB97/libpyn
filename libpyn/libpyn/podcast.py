@@ -102,12 +102,14 @@ class Podcast:
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
-        # Get into directory where mp3s will be stored
-        if foldername:
-            os.chdir('%s/%s' % (os.getcwd(), foldername))
-        else:
+        # Create foldername if none was passed
+        if not foldername:
             foldername = self.name.replace(' ', '_')
+
+        # Create directory if it doesn't exist
+        if not foldername in os.listdir():
             os.mkdir(foldername)
+
         os.chdir('%s/%s' % (os.getcwd(), foldername))
         log.info('Storing mp3 files in %s' % str(os.getcwd()))
 
