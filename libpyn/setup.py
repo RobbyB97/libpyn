@@ -10,7 +10,7 @@ requirements = ['beautifulsoup4', 'lxml', 'requests']
 
 setuptools.setup(
       name='libpyn',
-      version='1.0.0',
+      version='1.0.1',
       description='Libsyn podcast API',
       long_description=desc,
       long_description_content_type='text/markdown',
