@@ -4,7 +4,19 @@ import requests
 from time import sleep
 from bs4 import BeautifulSoup as bs
 
-logging.basicConfig(filename='podcast.log',level=logging.DEBUG)
+# Set Logger
+log = logging.getLogger('libpyn')
+log.setLevel(logging.INFO)
+handlerpath = os.path.dirname(os.path.realpath(__file__)) + '/app.log'
+handler = logging.FileHandler(handlerpath)
+handler.setLevel(logging.DEBUG)
+consoleHandler = logging.StreamHandler()
+formatter = logging.Formatter('[%(levelname)s]: %(message)s')
+handler.setFormatter(formatter)
+consoleHandler.setFormatter(formatter)
+log.addHandler(consoleHandler)
+log.addHandler(handler)
+log.info('Running file libpyn.podcast.py:')
 
 
 
@@ -32,7 +44,7 @@ class Podcast:
             html = requests.get(self.htmllink, headers=self.headers).text
             self.htmlsoup = bs(html, "lxml")
         except:
-            logging.exception('Link is not valid.')
+            log.exception('Link is not valid.')
 
         # Get RSS data
         self.name = self.xmlsoup.find('title')
@@ -74,7 +86,7 @@ class Podcast:
             try:
                 os.chdir(path)
             except:
-                logging.exception('Could not find directory at: %s ...' % path)
+                log.exception('Could not find directory at: %s ...' % path)
 
         # Find Downloads folder, make one if it doesn't exist
         else:
@@ -82,7 +94,7 @@ class Podcast:
             try:
                 os.chdir(home + '/Downloads')
             except:
-                logging.warning('Could not find Downloads folder. Creating...')
+                log.warning('Could not find Downloads folder. Creating...')
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
@@ -100,7 +112,7 @@ class Podcast:
 
         # Create foldername directory if it doesn't exist
         except:
-            logging.warning('/%s/ doesn\'t exist. Creating...')
+            log.warning('/%s/ doesn\'t exist. Creating...')
             os.mkdir('./%s/' % foldername)
             os.chdir('./%s/' % foldername)
 
@@ -112,7 +124,7 @@ class Podcast:
             for file in filelist:
                 if podcast['title'].replace(' ', '_') == file:
                     exists = True
-                    logging.warning('%s already exists. Skipping...' % file)
+                    log.warning('%s already exists. Skipping...' % file)
                 if exists == True:
                     break
 
@@ -121,7 +133,7 @@ class Podcast:
                 sleep(1)    # Ensure no IP ban
                 filename = podcast['title'].replace(' ', '_') + '.mp3'
                 file = requests.get(podcast['mp3'], headers=self.headers)
-                logging.debug('Downloading %s...' % podcast['title'])
+                log.debug('Downloading %s...' % podcast['title'])
                 with open(filename, 'wb') as f:
                     f.write(file.content)
         return
