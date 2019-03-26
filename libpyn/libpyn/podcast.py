@@ -133,7 +133,7 @@ class Podcast:
 
             # Ensure podcasts aren't redownloaded if directory not empty
             for file in filelist:
-                if podcast['title'].replace(' ', '_') == file:
+                if podcast['title'].replace(' ', '_').replace('/', '_') == file:
                     exists = True
                     log.warning('%s already exists. Skipping...' % file)
                 if exists == True:
@@ -142,7 +142,7 @@ class Podcast:
             # Download file
             if exists  == False:
                 sleep(1)    # Ensure no IP ban
-                filename = podcast['title'].replace(' ', '_') + '.mp3'
+                filename = podcast['title'].replace(' ', '_').replace('/', '_') + '.mp3'
                 file = requests.get(podcast['mp3'], headers=self.headers)
                 log.info('Downloading %s...' % podcast['title'])
                 with open(filename, 'wb') as f:
