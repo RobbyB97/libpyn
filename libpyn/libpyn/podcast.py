@@ -34,7 +34,6 @@ class Podcast:
         if not '/rss' in link:
             self.rsslink = link + '/rss'
             self.htmllink = link
-            log.info()
         if '/rss' in link:
             self.rsslink = link
             self.htmllink = link[:-4]
@@ -51,7 +50,7 @@ class Podcast:
             log.exception('Link is not valid.')
 
         # Get RSS data
-        self.name = self.xmlsoup.find('title')
+        self.name = self.xmlsoup.find('title').text
         log.debug('Podcast title: %s' % self.name)
         for item in self.xmlsoup.findAll('item'):
             self.mp3list.append(self.getRSSItem(item))
