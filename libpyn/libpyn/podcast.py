@@ -103,10 +103,12 @@ class Podcast:
                 os.chdir('%s/Downloads/' % home)
 
         # Set folder name to title of podcast if none was given
-        if not foldername:
+        try:
+            os.chdir('./%s/' % foldername)
+        except:
             foldername = self.name.replace(' ', '_')
+            os.chdir('./%s/' % foldername)
 
-        os.chdir('./%s/' % foldername)
         log.info('Storing mp3 files in %s' % str(os.getcwd()))
 
         # Get into podcast directory, keep note of previously saved files
