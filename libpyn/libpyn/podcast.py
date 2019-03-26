@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup as bs
 # Set Logger
 log = logging.getLogger('libpyn')
 log.setLevel(logging.WARNING)
-handlerpath = os.path.dirname(os.path.realpath(__file__)) + '/app.log'
+handlerpath = os.path.dirname(os.path.realpath(__file__)) + '/podcast.log'
 handler = logging.FileHandler(handlerpath)
 handler.setLevel(logging.DEBUG)
 consoleHandler = logging.StreamHandler()
@@ -102,13 +102,13 @@ class Podcast:
                 os.mkdir('%s/Downloads/' % home)
                 os.chdir('%s/Downloads/' % home)
 
-        # Set folder name to title of podcast if none was given
-        try:
-            os.chdir('./%s/' % foldername)
-        except:
+        # Get into directory where mp3s will be stored
+        if foldername:
+            os.chdir('%s/%s' % (os.getcwd(), foldername))
+        else:
             foldername = self.name.replace(' ', '_')
-            os.chdir('./%s/' % foldername)
-
+            os.mkdir(foldername)
+        os.chdir('%s/%s' % (os.getcwd(), foldername))
         log.info('Storing mp3 files in %s' % str(os.getcwd()))
 
         # Get into podcast directory, keep note of previously saved files
