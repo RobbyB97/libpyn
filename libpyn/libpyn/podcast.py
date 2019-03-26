@@ -87,7 +87,7 @@ class Podcast:
     # Download mp3 file(s)
     def download(self, path=None, foldername=None):
 
-        if dir:
+        if path:
             try:
                 os.chdir(path)
             except:
