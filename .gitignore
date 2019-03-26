@@ -1,0 +1,13 @@
+# Ignore virtual environment
+venv/*
+
+# Ignore logs
+*.log
+
+# Ignore cache
+*.pyc
+
+# Ignore PyPI meta
+libpyn/dist/*
+libpyn/libpyn.egg-info/*
+libpyn/build/*
