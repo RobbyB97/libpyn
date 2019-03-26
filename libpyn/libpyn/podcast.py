@@ -6,12 +6,12 @@ from bs4 import BeautifulSoup as bs
 
 # Set Logger
 log = logging.getLogger('libpyn')
-log.setLevel(logging.INFO)
+log.setLevel(logging.WARNING)
 handlerpath = os.path.dirname(os.path.realpath(__file__)) + '/app.log'
 handler = logging.FileHandler(handlerpath)
 handler.setLevel(logging.DEBUG)
 consoleHandler = logging.StreamHandler()
-formatter = logging.Formatter('[%(levelname)s]: %(message)s')
+formatter = logging.Formatter('Libpyn: [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
 consoleHandler.setFormatter(formatter)
 log.addHandler(consoleHandler)
@@ -30,17 +30,21 @@ class Podcast:
         self.headers = {'user-agent': 'libpyn/1.0.0'}
 
         # Get Links
+        log.debug('Parsing link: %s' % link)
         if not '/rss' in link:
             self.rsslink = link + '/rss'
             self.htmllink = link
+            log.info()
         if '/rss' in link:
             self.rsslink = link
             self.htmllink = link[:-4]
 
         # Parse links
         try:
+            log.info('Parsing RSS feed...')
             xml = requests.get(self.rsslink, headers=self.headers).text
             self.xmlsoup = bs(xml, "lxml")
+            log.warning('Parsing XML feed...')
             html = requests.get(self.htmllink, headers=self.headers).text
             self.htmlsoup = bs(html, "lxml")
         except:
@@ -48,6 +52,7 @@ class Podcast:
 
         # Get RSS data
         self.name = self.xmlsoup.find('title')
+        log.debug('Podcast title: %s' % self.name)
         for item in self.xmlsoup.findAll('item'):
             self.mp3list.append(self.getRSSItem(item))
         return
@@ -102,12 +107,15 @@ class Podcast:
         if not foldername:
             foldername = self.name.replace(' ', '_')
 
+        os.chdir('./%s/' % foldername)
+        log.info('Storing mp3 files in %s' % str(os.getcwd()))
+
         # Get into podcast directory, keep note of previously saved files
         try:
-            os.chdir('./%s/' % foldername)
             filelist = []   # List of downloaded mp3 files
             for podcast in os.listdir():
                 file = podcast.replace(' ', '_')[:-4]
+                log.info('%s found locally, will not be downloaded...' % file)
                 filelist.append(file)
 
         # Create foldername directory if it doesn't exist
@@ -133,7 +141,7 @@ class Podcast:
                 sleep(1)    # Ensure no IP ban
                 filename = podcast['title'].replace(' ', '_') + '.mp3'
                 file = requests.get(podcast['mp3'], headers=self.headers)
-                log.debug('Downloading %s...' % podcast['title'])
+                log.info('Downloading %s...' % podcast['title'])
                 with open(filename, 'wb') as f:
                     f.write(file.content)
         return
