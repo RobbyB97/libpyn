@@ -44,7 +44,7 @@ class Podcast:
             log.info('Parsing RSS feed...')
             xml = requests.get(self.rsslink, headers=self.headers).text
             self.xmlsoup = bs(xml, "lxml")
-            log.warning('Parsing XML feed...')
+            log.info('Parsing XML feed...')
             html = requests.get(self.htmllink, headers=self.headers).text
             self.htmlsoup = bs(html, "lxml")
         except:
