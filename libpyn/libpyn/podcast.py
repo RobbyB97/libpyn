@@ -74,12 +74,13 @@ class Podcast:
     # Get HTML iframes of latest episodes
     def iframes(self):
 
-        iframes = []
+        iframes = {}
 
         for item in self.htmlsoup.findAll('iframe'):
+            title = item['title']
             item = str(item).split('src="')
             item = str(item[0] + 'src="https:' + item[1])
-            iframes.append(item)
+            iframes[title] = item
         return iframes
 
 
