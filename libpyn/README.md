@@ -71,7 +71,8 @@ example.download(path=path, foldername=directory)
 
 * ### iframes
 
-In order to get a list of HTML iframes of the latest episodes to embed on a webpage, use the **iframes()** function.
+In order to get iframes of the latest episodes to embed on a webpage, use the **iframes()** function.
+It returns a dictionary where the key is the title of the episode and the value is the iframe.
 
 ``` python
 iframesList = example.iframes()
@@ -81,6 +82,9 @@ ___
 
 Changelog
 ---------
+
+### == v1.0.2 ==
+* _iframes now returns a dictionary. (key = Title, value = iframe)_
 
 ### == v1.0.1 ==
 * _Fix bugs involving download function_
