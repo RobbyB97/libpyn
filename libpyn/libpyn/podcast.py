@@ -71,17 +71,36 @@ class Podcast:
             log.exception('Could not parse item.')
         return podcast
 
-    # Get HTML iframes of latest episodes
+    # Get HTML iframes of latest episodes (if exist)
     def iframes(self):
 
-        iframes = {}
+        # Ensure iframes exist
+        if self.htmlsoup.find('iframe'):
+            log.info('Iframes found...')
+            iframes = {}        # Dictionary to be returned
+            i = 0       # Counter for iframe keys, if titles aren't present
 
-        for item in self.htmlsoup.findAll('iframe'):
-            title = item['title']
-            item = str(item).split('src="')
-            item = str(item[0] + 'src="https:' + item[1])
-            iframes[title] = item
+            for item in self.htmlsoup.findAll('iframe'):
+
+                # Get title/ dictionary key
+                try:
+                    title = item['title']
+                except:
+                    log.warning('Title not found...')
+                    title = 'title%s' % str(i)
+                    i += 1
+                    continue
+
+                item = str(item).split('src="')
+                item = str(item[0] + 'src="https:' + item[1])
+                iframes[title] = item
+
+        # If iframes don't exist
+        else:
+            log.warning('Could not find iframes in %s' % self.rsslink)
+            iframes = {'none': 'none'}
         return iframes
+
 
 
     # Download mp3 file(s)
