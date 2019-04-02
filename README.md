@@ -96,6 +96,9 @@ ___
 Changelog <a name="changelog"></a>
 ---------
 
+### == v1.0.3 ==
+* _iframes function only runs if iframes are present_
+
 ### == v1.0.2 ==
 * _iframes now returns a dictionary. (key = Title, value = iframe)_
 
