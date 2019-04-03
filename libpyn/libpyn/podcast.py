@@ -74,8 +74,31 @@ class Podcast:
     # Get HTML iframes of latest episodes (if exist)
     def iframes(self):
 
+        # Get iframe name from inline attribute
+        def title_one(item):
+            title = ''
+            if item.has_attr('title'):
+                log.warning('Inline title found...')
+                title = item['title']
+            return title
+
+        # Get iframe name from title tag in iframe parent entry
+        def title_two(item):
+            title = ''
+            parent = item.find_previous_sibling()
+            if parent.has_attr('title'):
+                log.warning('Title found in parent...')
+                title = item['title']
+            return title
+
+        # Generate title when one can't be found
+        def title_three(item, num):
+            log.warning('Title not found. Generating title...')
+            title = item + num
+            return title
+
         # Ensure iframes exist
-        if self.htmlsoup.find('iframe'):
+        if self.htmlsoup.find('iframe') != None:
             log.info('Iframes found...')
             iframes = {}        # Dictionary to be returned
             i = 0       # Counter for iframe keys, if titles aren't present
@@ -83,14 +106,16 @@ class Podcast:
             for item in self.htmlsoup.findAll('iframe'):
 
                 # Get title/ dictionary key
-                try:
-                    title = item['title']
-                except:
-                    log.warning('Title not found...')
-                    title = 'title%s' % str(i)
+                title = ''
+                if title_one(item) != '':
+                    title = title_one(item)
+                elif title_two(item) != '':
+                    title = title_two(item)
+                else:
+                    title = title_three(item, i)
                     i += 1
-                    continue
 
+                print(item)
                 item = str(item).split('src="')
                 item = str(item[0] + 'src="https:' + item[1])
                 iframes[title] = item
@@ -98,9 +123,8 @@ class Podcast:
         # If iframes don't exist
         else:
             log.warning('Could not find iframes in %s' % self.rsslink)
-            iframes = {'none': 'none'}
+            iframes['None'] = 'None'
         return iframes
-
 
 
     # Download mp3 file(s)
